@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using NUnit.Framework;
 using OpenQA.Selenium;
@@ -15,6 +16,9 @@ namespace MsbAppTests
         [SetUp]
         public void Setup()
         {
+            var platform = TestContext.Parameters["platform"];
+            TestContext.Out.WriteLine($"Platform: {platform}");
+
             _driver = WebDriverFactory.Create(Platform.NodeWebkit);
         }
 
@@ -74,7 +78,7 @@ namespace MsbAppTests
             Thread.Sleep(1000);
             cancelButton.Click();
 
-            Assert.Pass();
+            //Assert.Pass();
         }
 
         [Test]

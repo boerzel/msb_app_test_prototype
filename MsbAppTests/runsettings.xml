@@ -2,6 +2,7 @@
 <RunSettings>
   <!-- Parameters used by tests at runtime -->
   <TestRunParameters>
-    <Parameter name ="platform" value="Android" />
+    <Parameter name ="platform" value="WindowsApplication" />
+    <Parameter name ="appFilePath" value="C:\Users\andreas.boerzel\Downloads\application-builder-develop-debug-latest\ApplicationBuilder.exe" />
   </TestRunParameters>
 </RunSettings>

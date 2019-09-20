@@ -4,6 +4,7 @@ using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Android;
 using OpenQA.Selenium.Appium.Enums;
 using OpenQA.Selenium.Appium.iOS;
+using OpenQA.Selenium.Appium.Windows;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Remote;
 
@@ -11,14 +12,34 @@ namespace MsbAppTests
 {
     public enum Platform
     {
+        WindowsApplication,
         NodeWebkit,
         Android,
         iOS
     }
 
-
     public class WebDriverFactory
     {
+        private readonly string _remoteAddress;
+        private readonly string _deviceName;
+        private readonly string _app;
+
+        public WebDriverFactory(string remoteAddress, string deviceName, string app)
+        {
+            _remoteAddress = remoteAddress;
+            _deviceName = deviceName;
+            _app = app;
+        }
+
+        private WindowsDriver<IWebElement> CreateWindowsApplicationDriver()
+        {
+            var capabilities = new AppiumOptions();
+            capabilities.AddAdditionalCapability(MobileCapabilityType.DeviceName, _deviceName);
+            capabilities.AddAdditionalCapability(MobileCapabilityType.App, _app);
+
+            return new WindowsDriver<IWebElement>(new Uri(_remoteAddress), capabilities);
+        }
+
         private static IWebDriver CreateNodeWebkitDriver()
         {
             var options = new ChromeOptions();
@@ -68,21 +89,24 @@ namespace MsbAppTests
                 capabilities);
         }
 
-        public static IWebDriver Create(Platform platform)
+        public WindowsDriver<IWebElement> Create(Platform platform)
         {
-            IWebDriver driver;
+            WindowsDriver<IWebElement> driver;
 
             switch (platform)
             {
-                case Platform.NodeWebkit:
-                    driver = WebDriverFactory.CreateNodeWebkitDriver();
+                case Platform.WindowsApplication:
+                    driver = CreateWindowsApplicationDriver();
                     break;
-                case Platform.Android:
-                    driver = WebDriverFactory.CreateAndroidDriver();
-                    break;
-                case Platform.iOS:
-                    driver = WebDriverFactory.CreateIOSDriver();
-                    break;
+                //case Platform.NodeWebkit:
+                //    driver = WebDriverFactory.CreateNodeWebkitDriver();
+                //    break;
+                //case Platform.Android:
+                //    driver = WebDriverFactory.CreateAndroidDriver();
+                //    break;
+                //case Platform.iOS:
+                //    driver = WebDriverFactory.CreateIOSDriver();
+                //    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(platform), platform, null);
             }
